@@ -10,6 +10,7 @@ interface PlasmaProps {
     scale?: number;
     opacity?: number;
     mouseInteractive?: boolean;
+    paused?: boolean;
 }
 
 const hexToRgb = (hex: string): [number, number, number] => {
@@ -96,10 +97,16 @@ export const Plasma: React.FC<PlasmaProps> = ({
     direction = 'forward',
     scale = 1,
     opacity = 1,
-    mouseInteractive = true
+    mouseInteractive = true,
+    paused = false
 }) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const mousePos = useRef({ x: 0, y: 0 });
+    const pausedRef = useRef(paused);
+
+    useEffect(() => {
+        pausedRef.current = paused;
+    }, [paused]);
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -144,8 +151,8 @@ export const Plasma: React.FC<PlasmaProps> = ({
         const mesh = new Mesh(gl, { geometry, program });
 
         const handleMouseMove = (e: MouseEvent) => {
-            if (!mouseInteractive) return;
-            const rect = containerRef.current!.getBoundingClientRect();
+            if (!mouseInteractive || !containerRef.current) return;
+            const rect = containerRef.current.getBoundingClientRect();
             mousePos.current.x = e.clientX - rect.left;
             mousePos.current.y = e.clientY - rect.top;
             const mouseUniform = program.uniforms.uMouse.value as Float32Array;
@@ -158,7 +165,8 @@ export const Plasma: React.FC<PlasmaProps> = ({
         }
 
         const setSize = () => {
-            const rect = containerRef.current!.getBoundingClientRect();
+            if (!containerRef.current) return;
+            const rect = containerRef.current.getBoundingClientRect();
             const width = Math.max(1, Math.floor(rect.width));
             const height = Math.max(1, Math.floor(rect.height));
             renderer.setSize(width, height);
@@ -173,8 +181,20 @@ export const Plasma: React.FC<PlasmaProps> = ({
 
         let raf = 0;
         const t0 = performance.now();
+        let totalPausedDuration = 0;
+        let lastTime = t0;
+
         const loop = (t: number) => {
-            let timeValue = (t - t0) * 0.001;
+            const dt = t - lastTime;
+            lastTime = t;
+
+            if (pausedRef.current) {
+                totalPausedDuration += dt;
+                raf = requestAnimationFrame(loop);
+                return; // Skip rendering
+            }
+
+            let timeValue = (t - t0 - totalPausedDuration) * 0.001;
             if (direction === 'pingpong') {
                 const pingpongDuration = 10;
                 const segmentTime = timeValue % pingpongDuration;
@@ -199,8 +219,15 @@ export const Plasma: React.FC<PlasmaProps> = ({
                 containerRef.current.removeEventListener('mousemove', handleMouseMove);
             }
             try {
-                containerRef.current?.removeChild(canvas);
-            } catch { }
+                if (gl) {
+                    gl.getExtension('WEBGL_lose_context')?.loseContext();
+                }
+                if (containerRef.current && containerRef.current.contains(canvas)) {
+                    containerRef.current.removeChild(canvas);
+                }
+            } catch (e) {
+                console.warn("Error cleaning up Plasma:", e);
+            }
         };
     }, [color, speed, direction, scale, opacity, mouseInteractive]);
 
