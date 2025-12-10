@@ -1,57 +1,151 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import {
     Briefcase01Icon,
     Mortarboard02Icon,
     BookOpen01Icon,
     Award01Icon,
+    UserIcon,
     ArrowRight01Icon
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ABOUT_DATA } from "@/lib/about-data";
+import PillNav, { PillNavItem } from "@/components/ui/pill-nav";
 
 // --- Types & Data ---
+type SectionId = "intro" | "education" | "work" | "publications" | "awards";
+
+const SECTIONS_CONFIG: { id: SectionId; label: string; icon: any }[] = [
+    { id: "intro", label: "Introduction", icon: UserIcon },
+    { id: "education", label: "Education", icon: Mortarboard02Icon },
+    { id: "work", label: "Work Experience", icon: Briefcase01Icon },
+    { id: "publications", label: "Publications", icon: BookOpen01Icon },
+    { id: "awards", label: "Awards", icon: Award01Icon },
+];
 
 export function About() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [activeSection, setActiveSection] = useState<SectionId>("intro");
+
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start center", "end center"]
+    });
+
+    // Control Sidebar sliding:
+    // Slide IN when top of About hits center viewport (0) -> until 10% in (0.1)
+    // Slide OUT when bottom of About hits center viewport (0.85) -> until end (1)
+    const xParams = useTransform(
+        scrollYProgress,
+        [0, 0.1, 0.85, 1],
+        [-100, 0, 0, -100]
+    );
+    const opacityParams = useTransform(
+        scrollYProgress,
+        [0, 0.1, 0.85, 1],
+        [0, 1, 1, 0]
+    );
+
+    const springX = useSpring(xParams, { stiffness: 300, damping: 30 });
+    const springOpacity = useSpring(opacityParams, { stiffness: 300, damping: 30 });
+
+    // Scroll Spy Logic inside About Section
+    useEffect(() => {
+        const handleScroll = () => {
+            const sections = SECTIONS_CONFIG.map(s => s.id);
+            for (const id of sections) {
+                const element = document.getElementById(id);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    // If section is in middle of screen (roughly)
+                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                        setActiveSection(id);
+                        break;
+                    }
+                }
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToSection = (id: string) => {
+        const element = document.getElementById(id);
+        if (element) {
+            const offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight / 3;
+            window.scrollTo({ top: offsetTop, behavior: "smooth" });
+        }
+    };
+
+    const pillItems: PillNavItem[] = SECTIONS_CONFIG.map(section => ({
+        id: section.id,
+        label: section.label,
+        icon: section.icon,
+        isActive: activeSection === section.id,
+        onClick: () => scrollToSection(section.id)
+    }));
+
     return (
-        <section id="about" className="py-24 relative min-h-screen flex items-center justify-center">
+        <section ref={containerRef} id="about" className="py-24 relative min-h-screen">
+            {/* --- Vertical Pill Sidebar --- */}
+            <motion.div
+                className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+                style={{ x: springX, opacity: springOpacity }}
+            >
+                <PillNav
+                    items={pillItems}
+                    className="bg-black/20 backdrop-blur-md border border-white/5 py-6 px-3 shadow-2xl" // Re-adding some container style for visibility as requested previously, or keep clear? User said "remove everything... transparent". 
+                    // Let's stick to the styling requested: "vertical instead of horizontal". 
+                    // Previously transparency was requested. 
+                    // The PillNav component I built accepts className. 
+                    // Use transparent base.
+                    baseColor="transparent"
+                    pillColor="#ffffff" // White bubble
+                    hoveredIconColor="#000000" // Black icon on hover
+                    iconColor="rgba(255,255,255,0.5)" // Dimmed default icon
+                />
+            </motion.div>
+
             {/* --- Main Content Area --- */}
-            <div className="container px-4 md:px-6 mx-auto max-w-4xl">
-                <div className="space-y-24">
-                    <AnimatedSection delay={0}>
+            <div className="container px-4 md:px-6 mx-auto max-w-4xl pl-4 md:pl-24 lg:pl-32">
+                <div className="space-y-32">
+                    <SectionWrapper id="intro">
                         <IntroContent />
-                    </AnimatedSection>
+                    </SectionWrapper>
 
-                    <AnimatedSection delay={0.1}>
+                    <SectionWrapper id="education">
                         <EducationContent />
-                    </AnimatedSection>
+                    </SectionWrapper>
 
-                    <AnimatedSection delay={0.2}>
+                    <SectionWrapper id="work">
                         <WorkContent />
-                    </AnimatedSection>
+                    </SectionWrapper>
 
-                    <AnimatedSection delay={0.3}>
+                    <SectionWrapper id="publications">
                         <PublicationsContent />
-                    </AnimatedSection>
+                    </SectionWrapper>
 
-                    <AnimatedSection delay={0.4}>
+                    <SectionWrapper id="awards">
                         <AwardsContent />
-                    </AnimatedSection>
+                    </SectionWrapper>
                 </div>
             </div>
         </section>
     );
 }
 
-// Wrapper for scroll animation
-function AnimatedSection({ children, delay }: { children: React.ReactNode, delay: number }) {
+// Wrapper for identifying scroll sections
+function SectionWrapper({ id, children }: { id: string, children: React.ReactNode }) {
     return (
         <motion.div
+            id={id}
             initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="scroll-mt-[30vh]" // Offset for scroll target
         >
             {children}
         </motion.div>
@@ -60,6 +154,7 @@ function AnimatedSection({ children, delay }: { children: React.ReactNode, delay
 
 
 // --- Content Sub-Components ---
+// (Identical to previous step, keeping text changes)
 
 function IntroContent() {
     const { heading, name, description, cta } = ABOUT_DATA.intro;
@@ -68,7 +163,6 @@ function IntroContent() {
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
                 {heading} <span className="text-primary">{name}</span>
             </h2>
-            {/* Changed text-muted-foreground to text-zinc-600 for better contrast against Plasma */}
             <div className="text-lg text-zinc-600 leading-relaxed space-y-6">
                 {description.map((para, index) => (
                     <p key={index} dangerouslySetInnerHTML={{ __html: para }} />
@@ -148,7 +242,6 @@ function PublicationsContent() {
                             {pub.type}
                         </span>
                         <h4 className="text-2xl font-bold text-foreground mb-2">{pub.title}</h4>
-                        {/* Changed text-muted-foreground to text-zinc-600 for better visibility */}
                         <p className="text-zinc-600 mb-4">{pub.meta}</p>
                         <p className="text-zinc-600 leading-relaxed mb-4 max-w-3xl">
                             {pub.description}
@@ -178,7 +271,6 @@ function AwardsContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 {ABOUT_DATA.awards.map((award, index) => (
                     <Card key={index} title={award.title} subtitle={award.subtitle} meta={award.meta}>
-                        {/* Changed text-muted-foreground to text-zinc-600 */}
                         <p className="text-zinc-600 mt-2 leading-relaxed">
                             {award.description}
                         </p>
@@ -198,7 +290,6 @@ function Card({ title, subtitle, meta, children }: { title: string, subtitle: st
                 <h4 className="font-bold text-xl text-foreground pr-4">{title}</h4>
                 <span className="text-zinc-600 font-bold text-lg whitespace-nowrap mt-1 sm:mt-0">{meta}</span>
             </div>
-            {/* Changed text-muted-foreground to text-zinc-600/300 for subtitle to make it pop more */}
             <p className="text-zinc-600 font-medium text-lg mb-2">{subtitle}</p>
             {children}
         </div>
@@ -214,7 +305,6 @@ function TimelineItem({ role, company, period, children }: { role: string, compa
                 <h4 className="text-2xl font-bold text-foreground">{role}</h4>
                 <span className="text-zinc-600 font-bold text-lg mt-1 sm:mt-0 w-fit">{period}</span>
             </div>
-            {/* Changed text-muted-foreground to text-zinc-600 for company name */}
             <p className="text-zinc-600 font-medium text-lg">{company}</p>
             {children}
         </div>
