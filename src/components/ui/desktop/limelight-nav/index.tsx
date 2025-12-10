@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useLayoutEffect, cloneElement } from 'react';
+import React, { useState, useRef, useLayoutEffect, cloneElement, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 const DefaultHomeIcon = (props: React.SVGProps<SVGSVGElement>) => <svg {...(props as any)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>;
@@ -23,6 +23,7 @@ const defaultNavItems: NavItem[] = [
 export type LimelightNavProps = {
   items?: NavItem[];
   defaultActiveIndex?: number;
+  activeIndex?: number; // Added controlled prop
   onTabChange?: (index: number) => void;
   className?: string;
   limelightClassName?: string;
@@ -36,6 +37,7 @@ export type LimelightNavProps = {
 export const LimelightNav = ({
   items = defaultNavItems,
   defaultActiveIndex = 0,
+  activeIndex: controlledActiveIndex, // Destructure controlled prop
   onTabChange,
   className,
   limelightClassName,
@@ -46,6 +48,13 @@ export const LimelightNav = ({
   const [isReady, setIsReady] = useState(false);
   const navItemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const limelightRef = useRef<HTMLDivElement | null>(null);
+
+  // Sync internal state with controlled prop if provided
+  useEffect(() => {
+    if (controlledActiveIndex !== undefined) {
+      setActiveIndex(controlledActiveIndex);
+    }
+  }, [controlledActiveIndex]);
 
   useLayoutEffect(() => {
     if (items.length === 0) return;
