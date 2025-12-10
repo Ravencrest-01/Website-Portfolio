@@ -37,12 +37,12 @@ export function About() {
 
     const xParams = useTransform(
         scrollYProgress,
-        [0, 0.1, 0.9, 1],
+        [0.3, 0.5, 0.8, 1],
         [-100, 0, 0, -100]
     );
     const opacityParams = useTransform(
         scrollYProgress,
-        [0, 0.1, 0.9, 1],
+        [0.3, 0.5, 0.8, 1],
         [0, 1, 1, 0]
     );
 
