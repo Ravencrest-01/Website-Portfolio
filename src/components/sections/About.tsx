@@ -37,12 +37,12 @@ export function About() {
 
     const xParams = useTransform(
         scrollYProgress,
-        [0.3, 0.5, 0.8, 1],
+        [0, 0.1, 0.9, 1],
         [-100, 0, 0, -100]
     );
     const opacityParams = useTransform(
         scrollYProgress,
-        [0.3, 0.5, 0.8, 1],
+        [0, 0.1, 0.9, 1],
         [0, 1, 1, 0]
     );
 
@@ -60,7 +60,7 @@ export function About() {
     const ActiveComponent = SECTIONS_CONFIG.find(s => s.id === activeSection)?.component || IntroContent;
 
     return (
-        <section ref={containerRef} id="about" className="py-24 relative min-h-screen flex flex-col justify-center">
+        <section ref={containerRef} id="about" className="pt-[76px] pb-24 relative min-h-[calc(100vh-20px)] flex flex-col justify-center">
             {/* --- Vertical Pill Sidebar --- */}
             <SideNav
                 items={pillItems}

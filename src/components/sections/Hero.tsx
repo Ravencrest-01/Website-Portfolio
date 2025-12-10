@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function Hero() {
     return (
-        <section id="home" className="relative flex flex-col items-center justify-center min-h-screen pt-24 pb-12 overflow-hidden">
+        <section id="home" className="relative flex flex-col items-center justify-center min-h-screen pt-[30px] pb-0 overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] animate-pulse" />
                 <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-[128px] animate-pulse delay-1000" />
