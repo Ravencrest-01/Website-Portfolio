@@ -2,17 +2,18 @@
 
 import { LimelightNav } from "@/components/ui/desktop/limelight-nav";
 import { NAV_LINKS } from "@/lib/data";
-import { Home, User, Briefcase, Mail } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Home04Icon, IdIcon, ThreeDScaleIcon, Mail02Icon } from "@hugeicons/core-free-icons";
 import { useState } from "react";
 
 export function Navbar() {
     const [activeTab, setActiveTab] = useState(0);
 
     const icons = [
-        <Home key="home" className="w-5 h-5" />,
-        <User key="about" className="w-5 h-5" />,
-        <Briefcase key="projects" className="w-5 h-5" />,
-        <Mail key="contact" className="w-5 h-5" />,
+        <HugeiconsIcon key="home" icon={Home04Icon} strokeWidth={2} className="w-5 h-5" />,
+        <HugeiconsIcon key="about" icon={IdIcon} strokeWidth={2} className="w-5 h-5" />,
+        <HugeiconsIcon key="projects" icon={ThreeDScaleIcon} strokeWidth={2} className="w-5 h-5" />,
+        <HugeiconsIcon key="contact" icon={Mail02Icon} strokeWidth={2} className="w-5 h-5" />,
     ];
 
     const items = NAV_LINKS.map((link, index) => ({
