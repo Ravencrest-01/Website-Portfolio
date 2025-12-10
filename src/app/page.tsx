@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
@@ -15,6 +15,25 @@ import { PlayIcon, StopIcon } from "@hugeicons/core-free-icons";
 
 export default function Home() {
   const [animationOn, setAnimationOn] = useState(true);
+
+  useEffect(() => {
+    // Check for hardware acceleration/WebGL support
+    const checkHardwareAcceleration = () => {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl', { failIfMajorPerformanceCaveat: true });
+
+      if (!gl) {
+        setAnimationOn(false);
+        toast("Hardware Acceleration Not Detected", {
+          description: "Plasma animations disabled for optimal performance.",
+        });
+        return false;
+      }
+      return true;
+    };
+
+    checkHardwareAcceleration();
+  }, []);
 
   const toggleAnimation = () => {
     if (animationOn) {
