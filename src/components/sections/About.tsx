@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import {
     Briefcase01Icon,
     Mortarboard02Icon,
@@ -17,75 +17,46 @@ import PillNav, { PillNavItem } from "@/components/ui/pill-nav";
 // --- Types & Data ---
 type SectionId = "intro" | "education" | "work" | "publications" | "awards";
 
-const SECTIONS_CONFIG: { id: SectionId; label: string; icon: any }[] = [
-    { id: "intro", label: "Introduction", icon: UserIcon },
-    { id: "education", label: "Education", icon: Mortarboard02Icon },
-    { id: "work", label: "Work Experience", icon: Briefcase01Icon },
-    { id: "publications", label: "Publications", icon: BookOpen01Icon },
-    { id: "awards", label: "Awards", icon: Award01Icon },
+const SECTIONS_CONFIG: { id: SectionId; label: string; icon: any; component: React.FC }[] = [
+    { id: "intro", label: "Introduction", icon: UserIcon, component: IntroContent },
+    { id: "education", label: "Education", icon: Mortarboard02Icon, component: EducationContent },
+    { id: "work", label: "Work Experience", icon: Briefcase01Icon, component: WorkContent },
+    { id: "publications", label: "Publications", icon: BookOpen01Icon, component: PublicationsContent },
+    { id: "awards", label: "Awards", icon: Award01Icon, component: AwardsContent },
 ];
 
 export function About() {
-    const containerRef = useRef<HTMLDivElement>(null);
     const [activeSection, setActiveSection] = useState<SectionId>("intro");
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start center", "end center"]
     });
 
-    // Control Sidebar sliding:
-    // Slide IN when top of About hits center viewport (0) -> until 10% in (0.1)
-    // Slide OUT when bottom of About hits center viewport (0.85) -> until end (1)
     const xParams = useTransform(
         scrollYProgress,
-        [0, 0.1, 0.85, 1],
+        [0, 0.1, 0.9, 1],
         [-100, 0, 0, -100]
     );
     const opacityParams = useTransform(
         scrollYProgress,
-        [0, 0.1, 0.85, 1],
+        [0, 0.1, 0.9, 1],
         [0, 1, 1, 0]
     );
 
     const springX = useSpring(xParams, { stiffness: 300, damping: 30 });
     const springOpacity = useSpring(opacityParams, { stiffness: 300, damping: 30 });
 
-    // Scroll Spy Logic inside About Section
-    useEffect(() => {
-        const handleScroll = () => {
-            const sections = SECTIONS_CONFIG.map(s => s.id);
-            for (const id of sections) {
-                const element = document.getElementById(id);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
-                    // If section is in middle of screen (roughly)
-                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-                        setActiveSection(id);
-                        break;
-                    }
-                }
-            }
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    const scrollToSection = (id: string) => {
-        const element = document.getElementById(id);
-        if (element) {
-            const offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight / 3;
-            window.scrollTo({ top: offsetTop, behavior: "smooth" });
-        }
-    };
-
     const pillItems: PillNavItem[] = SECTIONS_CONFIG.map(section => ({
         id: section.id,
         label: section.label,
         icon: section.icon,
         isActive: activeSection === section.id,
-        onClick: () => scrollToSection(section.id)
+        onClick: () => setActiveSection(section.id)
     }));
+
+    const ActiveComponent = SECTIONS_CONFIG.find(s => s.id === activeSection)?.component || IntroContent;
 
     return (
         <section ref={containerRef} id="about" className="py-24 relative min-h-screen">
@@ -96,65 +67,30 @@ export function About() {
             >
                 <PillNav
                     items={pillItems}
-                    className="bg-black/20 backdrop-blur-md border border-white/5 py-6 px-3 shadow-2xl" // Re-adding some container style for visibility as requested previously, or keep clear? User said "remove everything... transparent". 
-                    // Let's stick to the styling requested: "vertical instead of horizontal". 
-                    // Previously transparency was requested. 
-                    // The PillNav component I built accepts className. 
-                    // Use transparent base.
-                    baseColor="transparent"
-                    pillColor="#ffffff" // White bubble
-                    hoveredIconColor="#000000" // Black icon on hover
-                    iconColor="rgba(255,255,255,0.5)" // Dimmed default icon
+                    className="bg-black/20 backdrop-blur-md border border-white/5 py-6 px-2 shadow-lg rounded-full w-16"
                 />
             </motion.div>
 
             {/* --- Main Content Area --- */}
-            <div className="container px-4 md:px-6 mx-auto max-w-4xl pl-4 md:pl-24 lg:pl-32">
-                <div className="space-y-32">
-                    <SectionWrapper id="intro">
-                        <IntroContent />
-                    </SectionWrapper>
-
-                    <SectionWrapper id="education">
-                        <EducationContent />
-                    </SectionWrapper>
-
-                    <SectionWrapper id="work">
-                        <WorkContent />
-                    </SectionWrapper>
-
-                    <SectionWrapper id="publications">
-                        <PublicationsContent />
-                    </SectionWrapper>
-
-                    <SectionWrapper id="awards">
-                        <AwardsContent />
-                    </SectionWrapper>
-                </div>
+            <div className="container px-4 md:px-6 mx-auto max-w-4xl pl-4 md:pl-24 lg:pl-32 min-h-[60vh] flex items-center">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={activeSection}
+                        initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                        className="w-full"
+                    >
+                        <ActiveComponent />
+                    </motion.div>
+                </AnimatePresence>
             </div>
         </section>
     );
 }
 
-// Wrapper for identifying scroll sections
-function SectionWrapper({ id, children }: { id: string, children: React.ReactNode }) {
-    return (
-        <motion.div
-            id={id}
-            initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="scroll-mt-[30vh]" // Offset for scroll target
-        >
-            {children}
-        </motion.div>
-    );
-}
-
-
 // --- Content Sub-Components ---
-// (Identical to previous step, keeping text changes)
 
 function IntroContent() {
     const { heading, name, description, cta } = ABOUT_DATA.intro;
