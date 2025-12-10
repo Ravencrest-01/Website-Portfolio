@@ -173,6 +173,8 @@ export const Plasma: React.FC<PlasmaProps> = ({
             const res = program.uniforms.iResolution.value as Float32Array;
             res[0] = gl.drawingBufferWidth;
             res[1] = gl.drawingBufferHeight;
+            // Force render to prevent blank canvas when paused
+            renderer.render({ scene: mesh });
         };
 
         const ro = new ResizeObserver(setSize);
