@@ -23,8 +23,21 @@ export function Navbar() {
         label: link.name,
         onClick: () => {
             const element = document.querySelector(link.href);
-            element?.scrollIntoView({ behavior: "smooth" });
-            setActiveTab(index); // Update local state immediately on click
+            if (element) {
+                if (link.href === "#about") {
+                    const rect = element.getBoundingClientRect();
+                    const absoluteTop = window.scrollY + rect.top;
+                    const centerPosition = absoluteTop - (window.innerHeight / 2) + (rect.height / 2);
+
+                    window.scrollTo({
+                        top: centerPosition,
+                        behavior: "smooth"
+                    });
+                } else {
+                    element.scrollIntoView({ behavior: "smooth" });
+                }
+            }
+            setActiveTab(index);
         },
     }));
 

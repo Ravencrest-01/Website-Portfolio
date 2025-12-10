@@ -12,7 +12,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ABOUT_DATA } from "@/lib/about-data";
-import PillNav, { PillNavItem } from "@/components/ui/pill-nav";
+import { PillNavItem } from "@/components/ui/pill-nav";
+import { SideNav } from "@/components/ui/side-nav";
 
 // --- Types & Data ---
 type SectionId = "intro" | "education" | "work" | "publications" | "awards";
@@ -59,20 +60,15 @@ export function About() {
     const ActiveComponent = SECTIONS_CONFIG.find(s => s.id === activeSection)?.component || IntroContent;
 
     return (
-        <section ref={containerRef} id="about" className="py-24 relative min-h-screen">
+        <section ref={containerRef} id="about" className="py-24 relative min-h-screen flex flex-col justify-center">
             {/* --- Vertical Pill Sidebar --- */}
-            <motion.div
-                className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+            <SideNav
+                items={pillItems}
                 style={{ x: springX, opacity: springOpacity }}
-            >
-                <PillNav
-                    items={pillItems}
-                    className="bg-black/20 dark:bg-white/5 backdrop-blur-md border border-white/5 dark:border-white/10 py-6 px-2 shadow-lg rounded-full w-16"
-                />
-            </motion.div>
+            />
 
             {/* --- Main Content Area --- */}
-            <div className="container px-4 md:px-6 mx-auto max-w-4xl pl-4 md:pl-24 lg:pl-32 min-h-[60vh] flex items-center">
+            <div className="container px-4 md:px-6 mx-auto max-w-6xl pl-4 md:pl-24 lg:pl-32 min-h-[60vh] flex items-center justify-center">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={activeSection}
