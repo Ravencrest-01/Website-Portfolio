@@ -40,8 +40,8 @@ const PillNav: React.FC<PillNavProps> = ({
                                 // Active: White Background, Black Icon, Scaled, Shifted, Shadow
                                 // Inactive: Transparent Background, Black Icon, Dimmed
                                 isActive
-                                    ? "w-12 h-12 bg-black/60 backdrop-blur-md border border-white/10 rounded-full text-white scale-110 translate-x-6 shadow-xl"
-                                    : "w-6 h-6 text-black opacity-50 hover:opacity-100"
+                                    ? "w-12 h-12 bg-black/60 dark:bg-white/10 backdrop-blur-md border border-white/10 rounded-full text-white dark:text-foreground scale-110 translate-x-6 shadow-xl"
+                                    : "w-6 h-6 text-black dark:text-zinc-300 opacity-50 hover:opacity-100"
                             )}
                         >
                             <HugeiconsIcon

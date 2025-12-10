@@ -67,7 +67,7 @@ export function About() {
             >
                 <PillNav
                     items={pillItems}
-                    className="bg-black/20 backdrop-blur-md border border-white/5 py-6 px-2 shadow-lg rounded-full w-16"
+                    className="bg-black/20 dark:bg-white/5 backdrop-blur-md border border-white/5 dark:border-white/10 py-6 px-2 shadow-lg rounded-full w-16"
                 />
             </motion.div>
 
@@ -99,7 +99,7 @@ function IntroContent() {
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
                 {heading} <span className="text-primary">{name}</span>
             </h2>
-            <div className="text-lg text-zinc-600 leading-relaxed space-y-6">
+            <div className="text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed space-y-6">
                 {description.map((para, index) => (
                     <p key={index} dangerouslySetInnerHTML={{ __html: para }} />
                 ))}
@@ -170,12 +170,12 @@ function PublicationsContent() {
             <div className="grid gap-10">
                 {ABOUT_DATA.publications.map((pub, index) => (
                     <div key={index} className="pl-4">
-                        <span className={`text-sm font-bold tracking-wider uppercase mb-2 block ${pub.type === 'Patent' ? 'text-zinc-600' : 'text-primary'}`}>
+                        <span className={`text-sm font-bold tracking-wider uppercase mb-2 block ${pub.type === 'Patent' ? 'text-zinc-600 dark:text-zinc-300' : 'text-primary'}`}>
                             {pub.type}
                         </span>
                         <h4 className="text-2xl font-bold text-foreground mb-2">{pub.title}</h4>
-                        <p className="text-zinc-600 mb-4">{pub.meta}</p>
-                        <p className="text-zinc-600 leading-relaxed mb-4 max-w-3xl">
+                        <p className="text-zinc-600 dark:text-zinc-300 mb-4">{pub.meta}</p>
+                        <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed mb-4 max-w-3xl">
                             {pub.description}
                         </p>
                         {pub.link && (
@@ -203,7 +203,7 @@ function AwardsContent() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 {ABOUT_DATA.awards.map((award, index) => (
                     <Card key={index} title={award.title} subtitle={award.subtitle} meta={award.meta}>
-                        <p className="text-zinc-600 mt-2 leading-relaxed">
+                        <p className="text-zinc-600 dark:text-zinc-300 mt-2 leading-relaxed">
                             {award.description}
                         </p>
                     </Card>
@@ -217,12 +217,12 @@ function AwardsContent() {
 
 function Card({ title, subtitle, meta, children }: { title: string, subtitle: string, meta: string, children?: React.ReactNode }) {
     return (
-        <div className="pl-4 border-l-2 border-white/10 hover:border-zinc-500 transition-colors duration-300">
+        <div className="pl-4 border-l-2 border-white/10 dark:border-white/5 hover:border-zinc-500 transition-colors duration-300">
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-2">
                 <h4 className="font-bold text-xl text-foreground pr-4">{title}</h4>
-                <span className="text-zinc-600 font-bold text-lg whitespace-nowrap mt-1 sm:mt-0">{meta}</span>
+                <span className="text-zinc-600 dark:text-zinc-300 font-bold text-lg whitespace-nowrap mt-1 sm:mt-0">{meta}</span>
             </div>
-            <p className="text-zinc-600 font-medium text-lg mb-2">{subtitle}</p>
+            <p className="text-zinc-600 dark:text-zinc-300 font-medium text-lg mb-2">{subtitle}</p>
             {children}
         </div>
     );
@@ -235,9 +235,9 @@ function TimelineItem({ role, company, period, children }: { role: string, compa
 
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-2">
                 <h4 className="text-2xl font-bold text-foreground">{role}</h4>
-                <span className="text-zinc-600 font-bold text-lg mt-1 sm:mt-0 w-fit">{period}</span>
+                <span className="text-zinc-600 dark:text-zinc-300 font-bold text-lg mt-1 sm:mt-0 w-fit">{period}</span>
             </div>
-            <p className="text-zinc-600 font-medium text-lg">{company}</p>
+            <p className="text-zinc-600 dark:text-zinc-300 font-medium text-lg">{company}</p>
             {children}
         </div>
     );
