@@ -10,10 +10,10 @@ export function Navbar() {
     const [activeTab, setActiveTab] = useState(0);
 
     const icons = [
-        <HugeiconsIcon key="home" icon={Home04Icon} strokeWidth={2} className="w-5 h-5" />,
-        <HugeiconsIcon key="about" icon={IdIcon} strokeWidth={2} className="w-5 h-5" />,
-        <HugeiconsIcon key="projects" icon={ThreeDScaleIcon} strokeWidth={2} className="w-5 h-5" />,
-        <HugeiconsIcon key="contact" icon={Mail02Icon} strokeWidth={2} className="w-5 h-5" />,
+        <HugeiconsIcon key="home" icon={Home04Icon} strokeWidth={2} className="w-7 h-7" />,
+        <HugeiconsIcon key="about" icon={IdIcon} strokeWidth={2} className="w-7 h-7" />,
+        <HugeiconsIcon key="projects" icon={ThreeDScaleIcon} strokeWidth={2} className="w-7 h-7" />,
+        <HugeiconsIcon key="contact" icon={Mail02Icon} strokeWidth={2} className="w-7 h-7" />,
     ];
 
     const items = NAV_LINKS.map((link, index) => ({

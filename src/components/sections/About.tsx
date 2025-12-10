@@ -93,7 +93,7 @@ export function About() {
 // --- Content Sub-Components ---
 
 function IntroContent() {
-    const { heading, name, description, cta } = ABOUT_DATA.intro;
+    const { heading, name, description } = ABOUT_DATA.intro;
     return (
         <div className="space-y-6">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
@@ -103,11 +103,7 @@ function IntroContent() {
                 {description.map((para, index) => (
                     <p key={index} dangerouslySetInnerHTML={{ __html: para }} />
                 ))}
-                <div className="pt-4">
-                    <a href="#contact" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium group text-lg">
-                        {cta} <HugeiconsIcon icon={ArrowRight01Icon} className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                </div>
+
             </div>
         </div>
     );

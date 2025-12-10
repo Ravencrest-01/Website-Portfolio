@@ -94,7 +94,7 @@ export const LimelightNav = ({
         >
           {cloneElement(icon as React.ReactElement<any>, {
             className: cn(
-              'w-6 h-6 transition-opacity duration-100 ease-in-out',
+              'w-7 h-7 transition-opacity duration-100 ease-in-out',
               activeIndex === index ? 'opacity-100' : 'opacity-40',
               (icon.props as any)?.className || '',
               iconClassName || ''
