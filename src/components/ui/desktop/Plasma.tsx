@@ -103,6 +103,14 @@ export const Plasma: React.FC<PlasmaProps> = ({
     const containerRef = useRef<HTMLDivElement | null>(null);
     const mousePos = useRef({ x: 0, y: 0 });
     const pausedRef = useRef(paused);
+    const isVisibleRef = useRef(true);
+
+    // Config for optimizations
+    const FPS_LIMIT = 30;
+    const FRAME_INTERVAL = 1000 / FPS_LIMIT;
+    // Restore original look: Full resolution, but capped FPS
+    // We keep IntersectionObserver for off-screen pausing as it doesn't affect visuals
+    const RESOLUTION_SCALE = 1.0;
 
     useEffect(() => {
         pausedRef.current = paused;
@@ -120,6 +128,7 @@ export const Plasma: React.FC<PlasmaProps> = ({
             webgl: 2,
             alpha: true,
             antialias: false,
+            // Restore: Allow up to 2x DPR for sharpness on Retina
             dpr: Math.min(window.devicePixelRatio || 1, 2)
         });
         const gl = renderer.gl;
@@ -151,10 +160,10 @@ export const Plasma: React.FC<PlasmaProps> = ({
         const mesh = new Mesh(gl, { geometry, program });
 
         const handleMouseMove = (e: MouseEvent) => {
-            if (!mouseInteractive || !containerRef.current) return;
+            if (!mouseInteractive || !containerRef.current || !isVisibleRef.current) return;
             const rect = containerRef.current.getBoundingClientRect();
-            mousePos.current.x = e.clientX - rect.left;
-            mousePos.current.y = e.clientY - rect.top;
+            mousePos.current.x = (e.clientX - rect.left) * RESOLUTION_SCALE;
+            mousePos.current.y = (e.clientY - rect.top) * RESOLUTION_SCALE;
             const mouseUniform = program.uniforms.uMouse.value as Float32Array;
             mouseUniform[0] = mousePos.current.x;
             mouseUniform[1] = mousePos.current.y;
@@ -167,15 +176,25 @@ export const Plasma: React.FC<PlasmaProps> = ({
         const setSize = () => {
             if (!containerRef.current) return;
             const rect = containerRef.current.getBoundingClientRect();
-            const width = Math.max(1, Math.floor(rect.width));
-            const height = Math.max(1, Math.floor(rect.height));
+            // Restore: Full resolution
+            const width = Math.max(1, Math.floor(rect.width * RESOLUTION_SCALE));
+            const height = Math.max(1, Math.floor(rect.height * RESOLUTION_SCALE));
+
             renderer.setSize(width, height);
+
             const res = program.uniforms.iResolution.value as Float32Array;
             res[0] = gl.drawingBufferWidth;
             res[1] = gl.drawingBufferHeight;
             // Force render to prevent blank canvas when paused
             renderer.render({ scene: mesh });
         };
+
+        // Optimization: IntersectionObserver to pause when off-screen
+        const observer = new IntersectionObserver(([entry]) => {
+            isVisibleRef.current = entry.isIntersecting;
+        }, { threshold: 0 });
+
+        observer.observe(containerRef.current);
 
         const ro = new ResizeObserver(setSize);
         ro.observe(containerRef.current);
@@ -185,16 +204,29 @@ export const Plasma: React.FC<PlasmaProps> = ({
         const t0 = performance.now();
         let totalPausedDuration = 0;
         let lastTime = t0;
+        let lastFrameTime = 0;
 
         const loop = (t: number) => {
+            raf = requestAnimationFrame(loop);
+
+            // Optimization: Skip if not visible or paused
+            if (!isVisibleRef.current || pausedRef.current) {
+                if (pausedRef.current) {
+                    const dt = t - lastTime;
+                    totalPausedDuration += dt;
+                }
+                lastTime = t;
+                return;
+            }
+
+            // Optimization: FPS Throttling
+            const elapsed = t - lastFrameTime;
+            if (elapsed < FRAME_INTERVAL) return;
+
+            // Adjust lastFrameTime to lock to interval
+            lastFrameTime = t - (elapsed % FRAME_INTERVAL);
             const dt = t - lastTime;
             lastTime = t;
-
-            if (pausedRef.current) {
-                totalPausedDuration += dt;
-                raf = requestAnimationFrame(loop);
-                return; // Skip rendering
-            }
 
             let timeValue = (t - t0 - totalPausedDuration) * 0.001;
             if (direction === 'pingpong') {
@@ -210,13 +242,13 @@ export const Plasma: React.FC<PlasmaProps> = ({
                 (program.uniforms.iTime as any).value = timeValue;
             }
             renderer.render({ scene: mesh });
-            raf = requestAnimationFrame(loop);
         };
         raf = requestAnimationFrame(loop);
 
         return () => {
             cancelAnimationFrame(raf);
             ro.disconnect();
+            observer.disconnect();
             if (mouseInteractive && containerRef.current) {
                 containerRef.current.removeEventListener('mousemove', handleMouseMove);
             }
