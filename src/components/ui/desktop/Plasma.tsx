@@ -108,8 +108,7 @@ export const Plasma: React.FC<PlasmaProps> = ({
     // Config for optimizations
     const FPS_LIMIT = 30;
     const FRAME_INTERVAL = 1000 / FPS_LIMIT;
-    // Restore original look: Full resolution, but capped FPS
-    // We keep IntersectionObserver for off-screen pausing as it doesn't affect visuals
+    // Optimization: Low-Res Canvas Hack (handled via dpr: 0.5 in renderer)
     const RESOLUTION_SCALE = 1.0;
 
     useEffect(() => {
@@ -128,8 +127,9 @@ export const Plasma: React.FC<PlasmaProps> = ({
             webgl: 2,
             alpha: true,
             antialias: false,
-            // Restore: Allow up to 2x DPR for sharpness on Retina
-            dpr: Math.min(window.devicePixelRatio || 1, 2)
+            // Optimization: "Extreme Low-Res Canvas Hack" - Force 0.15 dpr
+            // This renders at extremely low resolution, maximizing GPU savings
+            dpr: 0.25
         });
         const gl = renderer.gl;
         const canvas = gl.canvas as HTMLCanvasElement;
