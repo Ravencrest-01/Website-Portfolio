@@ -136,6 +136,8 @@ export const Plasma: React.FC<PlasmaProps> = ({
         canvas.style.display = 'block';
         canvas.style.width = '100%';
         canvas.style.height = '100%';
+        // Optimization: Blur the low-res canvas to hide pixelation
+        canvas.style.filter = 'blur(10px)';
         containerRef.current.appendChild(canvas);
 
         const geometry = new Triangle(gl);
