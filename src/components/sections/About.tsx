@@ -23,7 +23,7 @@ const SECTIONS_CONFIG: { id: SectionId; label: string; icon: any; component: Rea
     { id: "education", label: "Education", icon: Mortarboard02Icon, component: EducationContent },
     { id: "work", label: "Work Experience", icon: Briefcase01Icon, component: WorkContent },
     { id: "publications", label: "Publications", icon: BookOpen01Icon, component: PublicationsContent },
-    { id: "awards", label: "Awards", icon: Award01Icon, component: AwardsContent },
+    { id: "awards", label: "Hackathons", icon: Award01Icon, component: AwardsContent },
 ];
 
 export function About() {
@@ -193,7 +193,7 @@ function AwardsContent() {
                 <div className="p-3 bg-primary/10 rounded-xl">
                     <HugeiconsIcon icon={Award01Icon} strokeWidth={2} className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-3xl font-bold">Honours & Awards</h3>
+                <h3 className="text-3xl font-bold">Hackathons & Achievements</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">

@@ -1,35 +1,36 @@
 
 export const ABOUT_DATA = {
     intro: {
-        heading: "Hello, I'm",
-        name: "Ritik",
+        heading: "About",
+        name: "Me",
         description: [
-            "I am a <strong>Computer Science Engineer</strong> specializing in <strong>Front-End Heavy Full Stack Development</strong>, <strong>Artificial Intelligence</strong>, and <strong>Data Science</strong>. My passion lies in bridging the gap between complex algorithmic systems and intuitive, engaging user interfaces. I thrive on building scalable web applications and exploring the frontiers of AI to solve meaningful problems.",
-            "With a robust foundation in architecture design and advanced programming, I have a proven track record of innovating through independent research and open-source contributions. I am <strong>actively seeking opportunities</strong> to apply my technical expertise and creative problem-solving skills in a dynamic environment where I can drive impactful product development."
+            "I’m Ritik (aka Ravencrest). I specialize in <strong>Front-End Heavy Full Stack Development</strong>, <strong>Artificial Intelligence</strong>, and <strong>Data Science</strong>. My passion lies in bridging the gap between complex algorithmic systems and intuitive, engaging user interfaces.",
+            "I thrive on building scalable web applications and exploring the frontiers of AI to solve meaningful problems. With a strong background in architecture design, I have a proven track record of innovating through independent research and open-source contributions—you can check out my latest work on GitHub.",
+            "Currently, I am <strong>actively seeking opportunities</strong> to apply my technical expertise and creative problem-solving skills in a dynamic environment where I can drive impactful product development."
         ],
         cta: "Let's Work Together"
     },
     education: [
         {
-            title: "Bachelor's of Engineering",
-            subtitle: "Chandigarh University",
+            title: "Chandigarh University",
+            subtitle: "Bachelor's of Engineering (Computer Science Engineering)",
             meta: "2021 - 2025"
         }
     ],
     work: [
         {
-            role: "Open Source Contributor",
-            company: "Contributing to Open Source",
+            role: "Contributing to Open Source",
+            company: "Open Source Contributor",
             period: "2025 - Present"
         },
         {
-            role: "Full Stack Developer",
-            company: "WebnU | Delhi, India",
+            role: "WebnU | Delhi, India",
+            company: "Full Stack Developer",
             period: "February 2023 - April 2023"
         },
         {
-            role: "Web Developer",
-            company: "Dabotics India",
+            role: "Dabotics India",
+            company: "Web Developer",
             period: "July 2023 - August 2023"
         }
     ],
@@ -51,16 +52,28 @@ export const ABOUT_DATA = {
     ],
     awards: [
         {
-            title: "Hackathon Champions",
-            subtitle: "Coffee Code (Punjab University)",
-            meta: "Winner",
-            description: "Developed an Emergency Vehicle Guidance System, optimizing real-time traffic management for emergency responders."
+            title: "Coffee & Code at Legacy 6.0",
+            subtitle: "UIET Panjab University, Chandigarh",
+            meta: "Winner | Oct 2023",
+            description: "Developed a smart solution for Chandigarh City to tackle the problem of ambulance efficiency, helping drivers save lives faster and with lesser costs."
         },
         {
-            title: "Electrothon 5.0 Finalist",
-            subtitle: "NIT Hamirpur",
-            meta: "Finalist",
-            description: "Built a social media platform tailored for programmers, demonstrating full-stack excellence and UX design skills under time constraints."
+            title: "Hackout '23",
+            subtitle: "DTU, Delhi",
+            meta: "Top 10 Finalist | Nov 2023",
+            description: "Developed an automated path detection system to make traffic lights smarter and reactive to real-time road conditions."
+        },
+        {
+            title: "Electrothon 5.0 (MLH)",
+            subtitle: "NIT Hamirpur, HP",
+            meta: "Finalist | Apr 2023",
+            description: "Developed kodeSocial - a social media platform tailored for developers to share code and collaborate."
+        },
+        {
+            title: "iNeuron Techathon 2.0",
+            subtitle: "JECRC, Jaipur",
+            meta: "Participant | Sep 2022",
+            description: "Created a custom compiler for the kodeSocial platform, enhancing the developer experience."
         }
     ]
 };
