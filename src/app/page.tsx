@@ -49,7 +49,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background relative">
-      <div className="fixed top-6 left-6 z-50">
+      <div className="fixed top-9 left-6 z-50">
         <AnimationToggle isOn={animationOn} onToggle={toggleAnimation} />
       </div>
 

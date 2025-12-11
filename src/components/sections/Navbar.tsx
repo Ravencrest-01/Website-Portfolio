@@ -76,7 +76,7 @@ export function Navbar() {
                     onTabChange={setActiveTab}
                 />
             </div>
-            <div className="fixed top-6 right-6 z-50">
+            <div className="fixed top-9 right-6 z-50">
                 <ModeToggle />
             </div>
         </>
