@@ -35,17 +35,11 @@ export const PROJECTS = [
     },
 ];
 
-export const SKILLS = [
-    "React",
-    "Next.js",
-    "Tailwind CSS",
-    "TypeScript",
-    "Node.js",
-    "PostgreSQL",
-    "GraphQL",
-    "Docker",
-    "AWS",
-];
+export const SKILLS = {
+    languages: ["Python", "JavaScript", "TypeScript", "Java", "C++", "C"],
+    frameworks: ["React.js", "Node.js", "Express.js", "Django", "TensorFlow", "Mongoose"],
+    tools: ["Git", "GitHub", "Docker", "VS Code", "Postman", "Figma", "Firebase", "MongoDB", "PostgreSQL"]
+};
 
 export const SOCIALS = {
     github: "https://github.com/",

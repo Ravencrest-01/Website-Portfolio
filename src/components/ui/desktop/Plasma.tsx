@@ -127,8 +127,8 @@ export const Plasma: React.FC<PlasmaProps> = ({
             webgl: 2,
             alpha: true,
             antialias: false,
-            // Optimization: "Extreme Low-Res Canvas Hack" - Force 0.15 dpr
-            // This renders at extremely low resolution, maximizing GPU savings
+            // Optimization: " Low-Res Canvas Hack" - Force 0.25 dpr
+            // This renders at low resolution, maximizing GPU savings
             dpr: 0.25
         });
         const gl = renderer.gl;
