@@ -1,7 +1,7 @@
 "use client";
 
 import { LimelightNav } from "@/components/ui/limelight-nav";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 import { NAV_LINKS } from "@/lib/data";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Home04Icon, IdIcon, ThreeDScaleIcon, Mail02Icon } from "@hugeicons/core-free-icons";

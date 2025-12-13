@@ -9,7 +9,7 @@ import { Projects } from "@/components/sections/Projects";
 import { Footer } from "@/components/sections/Footer";
 import { Plasma } from "@/components/ui/Plasma";
 import { toast } from "sonner";
-import { AnimationToggle } from "@/components/animation-toggle";
+import { AnimationToggle } from "@/components/ui/animation-toggle";
 
 export default function Home() {
   const [animationOn, setAnimationOn] = useState(true);
