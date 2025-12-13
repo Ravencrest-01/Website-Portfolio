@@ -7,7 +7,7 @@ import { About } from "@/components/sections/About";
 import { Skills } from "@/components/sections/Skills";
 import { Projects } from "@/components/sections/Projects";
 import { Footer } from "@/components/sections/Footer";
-import { Plasma } from "@/components/ui/desktop/Plasma";
+import { Plasma } from "@/components/ui/Plasma";
 import { toast } from "sonner";
 import { AnimationToggle } from "@/components/animation-toggle";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { LimelightNav } from "@/components/ui/desktop/limelight-nav";
+import { LimelightNav } from "@/components/ui/limelight-nav";
 import { ModeToggle } from "@/components/mode-toggle";
 import { NAV_LINKS } from "@/lib/data";
 import { HugeiconsIcon } from "@hugeicons/react";

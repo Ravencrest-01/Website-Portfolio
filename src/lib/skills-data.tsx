@@ -118,3 +118,48 @@ export const SKILL_CATEGORIES = {
         { icon: Icons.antigravity, label: "Antigravity", slug: "antigravity" },
     ]
 };
+
+export const SUITCASE_DATA = {
+    CORE: [
+        { icon: Icons.javascript, label: "JavaScript", slug: "javascript" },
+        { icon: Icons.typescript, label: "TypeScript", slug: "typescript" },
+        { icon: Icons.python, label: "Python", slug: "python" },
+        { icon: Icons.java, label: "Java", slug: "java" },
+        { icon: Icons.cpp, label: "C++", slug: "cplusplus" },
+        { icon: Icons.c, label: "C", slug: "c" },
+        { icon: Icons.html, label: "HTML5", slug: "html5" },
+        { icon: Icons.css, label: "CSS3", slug: "css3" },
+        { icon: Icons.sql, label: "SQL", slug: "sql" },
+    ],
+    FRAMEWORKS: [
+        { icon: Icons.react, label: "React", slug: "react" },
+        { icon: Icons.next, label: "Next.js", slug: "nextdotjs" },
+        { icon: Icons.node, label: "Node.js", slug: "nodedotjs" },
+        { icon: Icons.express, label: "Express", slug: "express" },
+        { icon: Icons.django, label: "Django", slug: "django" },
+        { icon: Icons.tailwind, label: "Tailwind", slug: "tailwindcss" },
+        { icon: Icons.threejs, label: "Three.js", slug: "threejs" },
+        { icon: Icons.gsap, label: "GSAP", slug: "gsap" },
+        { icon: Icons.tensorflow, label: "TensorFlow", slug: "tensorflow" },
+    ],
+    TOOLS: [
+        { icon: Icons.git, label: "Git", slug: "git" },
+        { icon: Icons.docker, label: "Docker", slug: "docker" },
+        { icon: Icons.postman, label: "Postman", slug: "postman" },
+        { icon: Icons.betterauth, label: "Better Auth", slug: "betterauth" },
+        { icon: Icons.antigravity, label: "Antigravity", slug: "antigravity" },
+    ],
+    PLATFORMS_SOFTWARE: [
+        { icon: Icons.github, label: "GitHub", slug: "github" },
+        { icon: Icons.vscode, label: "VS Code", slug: "visualstudiocode" },
+        { icon: Icons.figma, label: "Figma", slug: "figma" },
+        { icon: Icons.adobexd, label: "Adobe XD", slug: "adobexd" },
+        { icon: Icons.vercel, label: "Vercel", slug: "vercel" },
+        { icon: Icons.mongodb, label: "MongoDB", slug: "mongodb" },
+        { icon: Icons.postgres, label: "PostgreSQL", slug: "postgresql" },
+        { icon: Icons.supabase, label: "Supabase", slug: "supabase" },
+        { icon: Icons.firebase, label: "Firebase", slug: "firebase" },
+        { icon: Icons.mongoose, label: "Mongoose", slug: "mongoose" },
+        { icon: Icons.cursor, label: "Cursor", slug: "cursor" },
+    ]
+};
